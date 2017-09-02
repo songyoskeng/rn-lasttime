@@ -1,48 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import firebase from './firebase'
-export default class App extends React.Component {
-    constructor(){
-      super();
-      this.ref = null;
-    }
-    componentDidMount() {
-      this.ref = firebase.database().ref('todos');
-      this.ref.on('value', this.handleToDoUpdate);
-    }
+// import firebase from './firebase'
+import { Router, Stack, Scene } from 'react-native-router-flux'
 
-    componentWillUnmount() {
-      if (this.ref) {
-        this.ref.off('value', this.handleToDoUpdate);
-      }
-    }
+import PageOne from './components/PageOne';
+import PageTwo from './components/PageTwo';
 
-    handleToDoUpdate = (snapshot) => {
-      this.todos = snapshot.val() || {};
-      console.log('this.todos: ', this.todos);
-  
-      // this.setState({
-      //   todos: this.listView.cloneWithRows(this.todos),
-      // });
-    }
+const App = () => (
+  <Router>
+    <Stack key="root">
+      <Scene key="pageOne" component={PageOne} title="PageOne" initial={true} />
+      <Scene key="pageTwo" component={PageTwo} title="PageTwo" />
+    </Stack>
+  </Router>
+);
 
-    
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default (App);
