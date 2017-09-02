@@ -3,8 +3,6 @@ package com.rnlasttime;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import io.invertase.firebase.RNFirebasePackage;
-import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -38,8 +36,6 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNFirebasePackage(),
-            new RNFirebaseAnalyticsPackage(),
           new RNFirebasePackage(),
           new RNFirebaseAdMobPackage(),
           new RNFirebaseAnalyticsPackage(),
