@@ -12,6 +12,9 @@ export default class Home extends React.Component {
             user: {}
         }
     }
+    componentWillMount() {
+        firebase.messaging().subscribeToTopic('news');        
+    }
     updateuser = (user) => {
         this.setState({user: user})
         // console.log(user);
@@ -19,6 +22,7 @@ export default class Home extends React.Component {
     }
   
     render() {
+        console.log( this.state.user);
         return (
             <View style={styles.container}>
               {

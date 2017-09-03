@@ -54,39 +54,41 @@ export default class LasttimeForm extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <TextInput
-                    value = {this.state.title}
-                    placeholder = {"Your Activity..."}
-                    onChangeText={(text) => this.setState({title: text})}
-                    style={styles.textInput}
-                />
-
-                <TextInput
-                    value = {this.state.description}
-                    placeholder = {"Description ..."}
-                    multiline={true}
-                    onChangeText={(text) => this.setState({description: text})}
-                    style={[styles.textInput, {fontSize:18}]}
-                />
-                {
-                    Platform.OS == 'ios'?
-                    <DatePickerIOS
-                        style={{alignSelf:'stretch',height: 75,justifyContent:'center',overflow:'hidden',marginVertical:25}}
-                        date = {this.state.date}
-                        timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
-                        onDateChange={this.onDateChange}
-                        mode={'datetime'}
-                        minuteInterval={5}
+                <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>  
+                    <TextInput
+                        value = {this.state.title}
+                        placeholder = {"Your Activity..."}
+                        onChangeText={(text) => this.setState({title: text})}
+                        style={styles.textInput}
                     />
-                    :
-                    <TouchableOpacity
-                        onPress = {this.handleDatePickerAndroid}
-                    >
-                        <Text>{this.state.lasttime}</Text>
-                    </TouchableOpacity>
+
+                    <TextInput
+                        value = {this.state.description}
+                        placeholder = {"Description ..."}
+                        onChangeText={(text) => this.setState({description: text})}
+                        style={[styles.textInput, {fontSize:18}]}
+                    />
+                    {
+                        Platform.OS == 'ios'?
+                        <DatePickerIOS
+                            style={{alignSelf:'stretch',height: 75,justifyContent:'center',overflow:'hidden',marginVertical:25}}
+                            date = {this.state.date}
+                            timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
+                            onDateChange={this.onDateChange}
+                            mode={'datetime'}
+                            minuteInterval={5}
+                        />
+                        :
+                        <TouchableOpacity
+                            onPress = {this.handleDatePickerAndroid}
+                        >
+                            <Text>{this.state.lasttime}</Text>
+                        </TouchableOpacity>
+                        
+                    }
                     
-                }
-                
+                </View>
+               
 
                 <TouchableOpacity
                     style={styles.btn}
@@ -103,7 +105,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 50,
-        alignItems: 'center'
+        justifyContent:'space-between'
     },
     textInput: {
         fontSize: 28,
@@ -111,5 +113,16 @@ const styles = StyleSheet.create({
         // textDecorationLine: 'underline',
         marginTop: 25,
         alignSelf: 'stretch'
+    },
+    btn: {
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'lightseagreen'
+    },
+    label: {
+        fontSize: 25,
+        fontWeight: '600',
+        color: 'white'
     }
 })

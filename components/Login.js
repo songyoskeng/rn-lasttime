@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, AsyncStorage,Image } from 'react-native';
 import firebase from '../Firebase'
 import _ from 'lodash'
 import {signOut} from './utils'
@@ -8,7 +8,7 @@ export default class Login extends React.Component {
         super();
         this.state = {
             email : "test@test.com",
-            password: "111111",
+            password: "111111"
         }
     }
     componentWillMount() {
@@ -21,7 +21,7 @@ export default class Login extends React.Component {
                
                 console.log('_user: ', _user);
                 this.props.updateuser(_user);
-
+                this.setState({loading: false})
                 firebase.auth().signInWithEmailAndPassword(_user.email, _user.password)
                 .then((user) => {
                   console.log('User successfully logged in', user)
@@ -31,19 +31,24 @@ export default class Login extends React.Component {
                     signOut();
                     this.props.updateuser({})
                 });
+            } else {
+                this.setState({loading: false})
             }
            
         })
     }
     handleLogin = ()=> {
         // console.log(this.state.email, this.state.password);
+        this.setState({loading: true})
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
         .then((user) => {
           console.log('User successfully logged in', user)
+          this.setState({loading: false})
           this.props.updateuser({uid: user.uid, email: this.state.email, password: this.state.password});
         })
         .catch((err) => {
           console.error('User signin error', err);
+          this.setState({loading: false})
         });
     }
 
@@ -51,23 +56,44 @@ export default class Login extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <TextInput
-                    value = {this.state.email}
-                    placeholder = {"Email"}
-                    keyboardType="email-address"
-                    onChangeText={(text) => this.setState({email: text})}
-                    style={styles.textInput}
-                />
-                <TextInput
-                    value = {this.state.password}
-                    placeholder = {"Password"}
-                    secureTextEntry={true}
-                    onChangeText={(text) => this.setState({password: text})}
-                    style={styles.textInput}
-                />
-                <TouchableOpacity onPress={this.handleLogin}>
-                    <Text>Sign In</Text>
-                </TouchableOpacity>
+                {
+                    this.state.loading?
+                    <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+                        <Image 
+                            style={{width:150,height:150}}
+                            source={require('../img/loading.gif')} 
+                        />
+                    </View>
+                        
+                    :
+                    <View style={{flex:1,flexDirection:'column'}}>
+                        <View style={{flex:1,justifyContent:'center'}}>
+                            <TextInput
+                                value = {this.state.email}
+                                placeholder = {"Email"}
+                                keyboardType="email-address"
+                                onChangeText={(text) => this.setState({email: text})}
+                                style={styles.textInput}
+                            />
+                            <TextInput
+                                value = {this.state.password}
+                                placeholder = {"Password"}
+                                secureTextEntry={true}
+                                onChangeText={(text) => this.setState({password: text})}
+                                style={styles.textInput}
+                            />
+                
+                        </View>
+                       
+                        <TouchableOpacity 
+                            style={styles.btn}
+                            onPress={this.handleLogin}>
+                            <Text style={styles.label}>Sign In</Text>
+                        </TouchableOpacity>
+                    </View>
+                    
+                }
+               
             </View>
         )
     }
@@ -76,8 +102,7 @@ export default class Login extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 50,
-        alignItems: 'center'
+        marginTop: 50
     },
     textInput: {
         fontSize: 28,
@@ -85,5 +110,16 @@ const styles = StyleSheet.create({
         // textDecorationLine: 'underline',
         marginTop: 25,
         alignSelf: 'stretch'
+    },
+    btn: {
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor:'lightseagreen'
+    },
+    label: {
+        fontSize: 25,
+        fontWeight: '600',
+        color: 'white'
     }
 })
