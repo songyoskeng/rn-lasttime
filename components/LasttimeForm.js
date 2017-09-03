@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput,TouchableOpacity } from 'react-native';
+import {Actions} from 'react-native-router-flux'
 // import firebase from './firebase'
 import moment from 'moment'
 const DATE_FORMAT = 'YY-MM-DD HH:mm'
@@ -7,10 +8,12 @@ export default class LasttimeForm extends React.Component {
     constructor(){
         super();
         this.state = {
-            title : "",
+            title : "Have Lunch",
             lasttime: moment().format(DATE_FORMAT)
         }
     }
+
+    
     render() {
         return (
             <View style={styles.container}>
@@ -26,6 +29,16 @@ export default class LasttimeForm extends React.Component {
                     onChangeText={(text) => this.setState({lasttime: text})}
                     style={styles.textInput}
                 />
+
+                <TouchableOpacity
+                    style={styles.btn}
+                    onPress={() => {
+                        Actions.pop()
+                        this.props.handleAddLasttime(this.state.title, this.state.lasttime)
+                    }}
+                >
+                    <Text style={styles.label}>ADD</Text>
+                </TouchableOpacity>
             </View>
         )
     }

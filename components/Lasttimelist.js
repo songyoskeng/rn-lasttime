@@ -22,6 +22,7 @@ export default class Lasttimelist extends React.Component {
         // Keep a local reference of the TODO items
         this.lasttimes = {};
     }
+
     componentDidMount() {
         this.ref = firebase.database().ref('todos');
         this.ref.on('value', this.handleItemUpdate);
@@ -47,16 +48,17 @@ export default class Lasttimelist extends React.Component {
         );
     }
     
-    handleAddLasttime = () => {
+    handleAddLasttime = (title, lasttime) => {
         var newItem = new Object()
-        var lastItem = _.findLast(this.lasttimes);
-        var newId = lastItem? lastItem.id+1:0
+        var newId = _.max(_.keys(this.lasttimes)) + 1;
 
         newItem[newId] = {
             id : newId,
-            title: "Go Home",
-            lasttime: moment().format('YY-MM-DD HH:mm')
+            title,
+            lasttime
         }
+        console.log(newItem);
+
 
         this.ref.set({
           ...this.lasttimes, 
@@ -74,7 +76,7 @@ export default class Lasttimelist extends React.Component {
                 />
                 <TouchableOpacity
                     style={styles.btn}
-                    onPress={() => Actions.lasttime_form()}
+                    onPress={() => Actions.lasttime_form({handleAddLasttime:this.handleAddLasttime})}
                 >
                     <Text style={styles.label}>ADD</Text>
                 </TouchableOpacity>
