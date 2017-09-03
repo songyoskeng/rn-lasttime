@@ -1,14 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Actions } from 'react-native-router-flux'
 import moment from 'moment'
 
 const LasttimeItem = (props) => {
     const DATE_FORMAT = "YY-MM-DD HH:mm"
     return(
-        <View style={styles.row}>
+        <TouchableOpacity style={styles.row} onPress={() => Actions.lasttime_detail(props)}>
             <Text style={styles.bigText}>{props.title}</Text>
             <Text>{moment(props.lasttime,DATE_FORMAT).fromNow()}</Text>
-        </View>
+        </TouchableOpacity>
     )
 };
 
