@@ -29,6 +29,7 @@ export default class Login extends React.Component {
                 })
                 .catch((err) => {
                     signOut();
+                    this.props.updateuser({})
                 });
             }
            

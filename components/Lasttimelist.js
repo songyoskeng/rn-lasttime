@@ -48,17 +48,16 @@ export default class Lasttimelist extends React.Component {
         );
     }
     
-    handleAddLasttime = (title, lasttime) => {
+    handleAddLasttime = (item) => {
         var newItem = new Object()
         var newId = _.max(_.keys(this.lasttimes)) + 1;
 
         newItem[newId] = {
             id : newId,
-            title,
-            lasttime
+            ...item
         }
         console.log(newItem);
-
+        
 
         this.ref.set({
           ...this.lasttimes, 
