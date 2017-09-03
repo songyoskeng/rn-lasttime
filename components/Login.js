@@ -36,7 +36,7 @@ export default class Login extends React.Component {
         })
     }
     handleLogin = ()=> {
-        console.log(this.state.email, this.state.password);
+        // console.log(this.state.email, this.state.password);
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
         .then((user) => {
           console.log('User successfully logged in', user)
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     textInput: {
         fontSize: 28,
         textAlign: 'center',
-        textDecorationLine: 'underline',
+        // textDecorationLine: 'underline',
         marginTop: 25,
         alignSelf: 'stretch'
     }

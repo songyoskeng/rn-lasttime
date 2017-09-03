@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput,TouchableOpacity, DatePickerIOS,  } from 'react-native';
+import { StyleSheet, Text, View, TextInput,TouchableOpacity, DatePickerIOS, DatePickerAndroid, Platform } from 'react-native';
 import {Actions} from 'react-native-router-flux'
 // import firebase from './firebase'
 import moment from 'moment'
@@ -20,6 +20,21 @@ export default class LasttimeForm extends React.Component {
     }
     onDateChange = (date) => {
         this.setState({date})
+    }
+
+    handleDatePickerAndroid = () => {
+        DatePickerAndroid.open({
+            // Use `new Date()` for current date.
+            // May 25 2020. Month 0 is January.
+            date: this.state.date
+        }).then(date => {
+            if (date.action !== DatePickerAndroid.dismissedAction) {
+                // Selected year, month (0-11), day
+                console.log(date);
+                var datestr = date.day+'/'+(date.month+1)+'/'+date.year
+                this.setState({lasttime : datestr})
+            }
+        })
     }
 
     handleAddItem = () => {
@@ -53,15 +68,25 @@ export default class LasttimeForm extends React.Component {
                     onChangeText={(text) => this.setState({description: text})}
                     style={[styles.textInput, {fontSize:18}]}
                 />
-
-                <DatePickerIOS
-                    style={{alignSelf:'stretch',height: 75,justifyContent:'center',overflow:'hidden',marginVertical:25}}
-                    date = {this.state.date}
-                    timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
-                    onDateChange={this.onDateChange}
-                    mode={'datetime'}
-                    minuteInterval={5}
-                />
+                {
+                    Platform.OS == 'ios'?
+                    <DatePickerIOS
+                        style={{alignSelf:'stretch',height: 75,justifyContent:'center',overflow:'hidden',marginVertical:25}}
+                        date = {this.state.date}
+                        timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
+                        onDateChange={this.onDateChange}
+                        mode={'datetime'}
+                        minuteInterval={5}
+                    />
+                    :
+                    <TouchableOpacity
+                        onPress = {this.handleDatePickerAndroid}
+                    >
+                        <Text>{this.state.lasttime}</Text>
+                    </TouchableOpacity>
+                    
+                }
+                
 
                 <TouchableOpacity
                     style={styles.btn}
@@ -83,7 +108,7 @@ const styles = StyleSheet.create({
     textInput: {
         fontSize: 28,
         textAlign: 'center',
-        textDecorationLine: 'underline',
+        // textDecorationLine: 'underline',
         marginTop: 25,
         alignSelf: 'stretch'
     }
