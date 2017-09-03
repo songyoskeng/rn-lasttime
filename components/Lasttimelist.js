@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, ListView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ListView, TouchableOpacity, AsyncStorage } from 'react-native';
 // import firebase from './firebase'
 import { Actions } from 'react-native-router-flux'
 import firebase from '../Firebase'
 import moment from 'moment'
 import _ from 'lodash'
 import LasttimeItem from './LasttimeItem'
-
+import {signOut} from './utils'
 export default class Lasttimelist extends React.Component {
     constructor(){
         super();
@@ -66,6 +66,11 @@ export default class Lasttimelist extends React.Component {
         })
 
     }
+
+    handleSignout = () => {
+        signOut();
+        this.props.updateuser({})
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -75,10 +80,16 @@ export default class Lasttimelist extends React.Component {
                     enableEmptySections={true}
                 />
                 <TouchableOpacity
-                    style={styles.btn}
+                    style={[styles.btn, { backgroundColor: 'lightseagreen',marginVertical:10}]}
                     onPress={() => Actions.lasttime_form({handleAddLasttime:this.handleAddLasttime})}
                 >
                     <Text style={styles.label}>ADD</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.btn, { backgroundColor: 'crimson'}]}
+                    onPress={this.handleSignout}
+                >
+                    <Text style={styles.label}>Sign Out</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -90,10 +101,9 @@ const styles = StyleSheet.create({
         flex: 1
     },
     btn: {
-        backgroundColor: 'lightseagreen',
         height: 50,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     label: {
         fontSize: 25,

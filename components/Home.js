@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ListView } from 'react-native';
+import { StyleSheet, Text, View, ListView, AsyncStorage } from 'react-native';
 // import firebase from './firebase'
 import firebase from '../Firebase'
 import Lasttimelist from './Lasttimelist'
@@ -14,14 +14,10 @@ export default class Home extends React.Component {
     }
     updateuser = (user) => {
         this.setState({user: user})
+        // console.log(user);
+        AsyncStorage.setItem('rn_lasttime.user', JSON.stringify({...user}));
     }
-    componentWillUnmount() {
-        firebase.auth().signOut()
-        .then(() => {
-          console.log('User signed out successfully');
-        })
-        .catch();
-    }
+  
     render() {
         return (
             <View style={styles.container}>
@@ -29,7 +25,7 @@ export default class Home extends React.Component {
                 _.isEmpty(this.state.user)?
                 <Login updateuser={this.updateuser}/>
                 :
-                <Lasttimelist/>
+                <Lasttimelist updateuser={this.updateuser}/>
               }  
             </View>
         )
