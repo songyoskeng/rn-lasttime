@@ -26,7 +26,7 @@ export default class Lasttimelist extends React.Component {
     }
 
     componentDidMount() {
-        this.ref = firebase.database().ref('todos');
+        this.ref = firebase.database().ref(this.props.user.uid+'/todos');
         this.ref.on('value', this.handleItemUpdate);
     }
     componentWillUnmount() {
@@ -42,11 +42,14 @@ export default class Lasttimelist extends React.Component {
     handleItemUpdate = (snapshot) => {
 
         this.lasttimes = snapshot.val() || {};
-        this.lasttimes = _.orderBy(this.lasttimes, ['lasttime'],['desc'])
+        console.log(' this.lasttimes: ',  this.lasttimes);
+        this.lasttimes =  _.filter(this.lasttimes, (l) => (l != null))
+        var lasttimes = _.orderBy(this.lasttimes, ['lasttime'],['desc'])
+
         
         console.log('this.lasttimes: ', this.lasttimes);
         this.setState({
-            lasttimes: this.ds.cloneWithRows(this.lasttimes),
+            lasttimes: this.ds.cloneWithRows(lasttimes),
             loading: false,
             refreshing: false
         });
@@ -55,26 +58,55 @@ export default class Lasttimelist extends React.Component {
     }
     renderRow(item) {
         return (
-            <LasttimeItem {...item} />
+            <LasttimeItem {...item} uid={this.props.user.uid} handleDelete={this.handleDelete}/>
         );
     }
     
     handleAddLasttime = (item) => {
-        var newItem = new Object()
-        var newId = _.max(_.keys(this.lasttimes)) + 1;
+        var activityList = _.map(this.lasttimes, (l) => ({id:l.id ,activity:_.toLower(_.camelCase(l.activity))})   )
+        // console.log('activityList: ', activityList);
+        // console.log(item);
+        var findItem = _.find(activityList, ['activity', _.toLower(_.camelCase(item.activity))])
+        if(_.isEmpty(findItem)){
+            var newItem = new Object()
+            var newId = _.max(_.keys(this.lasttimes))? 
+                    _.parseInt(_.max(_.map(this.lasttimes, (l) => l.id))) + 1:0
+            newItem[newId] = {
+                id : newId,
+                ...item
+            }
+            // console.log(newItem);
+            this.ref.set({
+              ...this.lasttimes, 
+              ...newItem
+            })
+    
+        } else {
+            this.lasttimes[findItem.id] = {
+                id : findItem.id,
+                ...item
+            }
+            this.ref.set({
+                ...this.lasttimes
+            })
 
-        newItem[newId] = {
-            id : newId,
-            ...item
         }
-        console.log(newItem);
-        
 
-        this.ref.set({
-          ...this.lasttimes, 
-          ...newItem
+        
+    }
+
+    handleDelete = (id) => {
+        
+        var _listtimes = _.filter(this.lasttimes, (l) => l.id != id )
+        // console.log('_listtimes: ', _listtimes);
+        _.forEach(_listtimes, (v,k) => {
+            _listtimes[k].id = k;
         })
 
+        // console.log('_listtimes: ', _listtimes);
+        this.ref.set({
+            ..._listtimes
+        })
     }
 
     handleSignout = () => {

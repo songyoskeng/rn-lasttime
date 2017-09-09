@@ -14,7 +14,7 @@ const App = () => (
   <Router>
     <Stack key="root">
       <Scene key="home" component={Home} title="Last time" initial={true} />
-      <Scene key="lasttime_detail" component={LasttimeDetail}  />
+      <Scene key="lasttime_detail" component={LasttimeDetail} title="Detail"  />
       <Scene key="lasttime_form" component={LasttimeForm} title="New Lasttime" />
     </Stack>
   </Router>

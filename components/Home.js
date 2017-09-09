@@ -22,14 +22,14 @@ export default class Home extends React.Component {
     }
   
     render() {
-        console.log( this.state.user);
+        // console.log( this.state.user);
         return (
             <View style={styles.container}>
               {
                 _.isEmpty(this.state.user)?
                 <Login updateuser={this.updateuser}/>
                 :
-                <Lasttimelist updateuser={this.updateuser}/>
+                <Lasttimelist updateuser={this.updateuser}  user={this.state.user}/>
               }  
             </View>
         )

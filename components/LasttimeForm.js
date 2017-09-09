@@ -42,7 +42,7 @@ export default class LasttimeForm extends React.Component {
             Actions.pop()
             var _lasttime = moment(this.state.date).format(DATE_FORMAT)
             var newItem = {
-                title: this.state.title,
+                activity: this.state.title,
                 lasttime: _lasttime,
                 description: this.state.description
             }
@@ -61,13 +61,13 @@ export default class LasttimeForm extends React.Component {
                         onChangeText={(text) => this.setState({title: text})}
                         style={styles.textInput}
                     />
-
+                    {/*
                     <TextInput
                         value = {this.state.description}
                         placeholder = {"Description ..."}
                         onChangeText={(text) => this.setState({description: text})}
                         style={[styles.textInput, {fontSize:18}]}
-                    />
+                    />*/}
                     {
                         Platform.OS == 'ios'?
                         <DatePickerIOS

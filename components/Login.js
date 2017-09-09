@@ -20,8 +20,9 @@ export default class Login extends React.Component {
             if(!_.isEmpty(value) && !_.isEmpty(_user)){
                
                 console.log('_user: ', _user);
-                this.props.updateuser(_user);
+
                 this.setState({loading: false})
+                this.props.updateuser(_user);
                 firebase.auth().signInWithEmailAndPassword(_user.email, _user.password)
                 .then((user) => {
                   console.log('User successfully logged in', user)
